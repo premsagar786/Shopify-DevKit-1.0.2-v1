@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="360" viewBox="0 0 1000 360" role="img" aria-labelledby="title desc">
+  <title id="title">Docker validation output</title>
+  <desc id="desc">A terminal snapshot showing Node 20 and five Shopify DevKit hook tests passing in Docker Desktop.</desc>
+  <rect width="1000" height="360" fill="#0d1117" rx="16"/>
+  <circle cx="34" cy="34" r="9" fill="#ff5f57"/><circle cx="62" cy="34" r="9" fill="#febc2e"/><circle cx="90" cy="34" r="9" fill="#28c840"/>
+  <text x="122" y="40" fill="#c9d1d9" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18">Docker Desktop · node:20-alpine</text>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="19">
+    <text x="40" y="92" fill="#7ee787">$</text><text x="64" y="92" fill="#c9d1d9">node --version</text>
+    <text x="40" y="122" fill="#a5d6ff">v20.20.2</text>
+    <text x="40" y="166" fill="#7ee787">PASS</text><text x="96" y="166" fill="#c9d1d9">empty (silent)</text>
+    <text x="40" y="196" fill="#7ee787">PASS</text><text x="96" y="196" fill="#c9d1d9">with-app</text>
+    <text x="40" y="226" fill="#7ee787">PASS</text><text x="96" y="226" fill="#c9d1d9">post-tool build</text>
+    <text x="40" y="256" fill="#7ee787">PASS</text><text x="96" y="256" fill="#c9d1d9">post-tool failed Rust Wasm build</text>
+    <text x="40" y="286" fill="#7ee787">PASS</text><text x="96" y="286" fill="#c9d1d9">post-tool ignores unrelated commands</text>
+    <text x="40" y="330" fill="#79c0ff">5 passed, 0 failed</text>
+  </g>
+</svg>

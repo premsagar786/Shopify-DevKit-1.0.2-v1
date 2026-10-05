@@ -1,0 +1,20 @@
+{
+  "name": "shopify-devkit",
+  "version": "1.0.2",
+  "description": "Scaffold Shopify Online Store 2.0 themes, generate Liquid sections, scaffold Shopify Functions and checkout extensions, and audit themes for performance and security.",
+  "author": {
+    "name": "Shopify DevKit contributors"
+  },
+  "license": "MIT",
+  "keywords": [
+    "shopify",
+    "liquid",
+    "theme",
+    "online-store-2",
+    "functions",
+    "checkout-ui",
+    "hydrogen"
+  ],
+  "homepage": "https://github.com/mohitkale/shopify-devkit",
+  "repository": "https://github.com/mohitkale/shopify-devkit.git"
+}

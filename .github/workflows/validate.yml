@@ -1,0 +1,90 @@
+name: Validate plugin
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Required files exist
+        run: |
+          test -f README.md
+          test -f LICENSE
+          test -f CHANGELOG.md
+          test -f .claude-plugin/plugin.json
+
+      - name: plugin.json is valid JSON with required fields
+        run: |
+          node -e "
+          const p = JSON.parse(require('fs').readFileSync('.claude-plugin/plugin.json', 'utf8'));
+          if (!p.name) { console.error('missing name'); process.exit(1); }
+          if (!p.version) { console.error('missing version'); process.exit(1); }
+          if (!p.description) { console.error('missing description'); process.exit(1); }
+          if (p.author && p.author.email) { console.error('author email must not be distributed'); process.exit(1); }
+          console.log('plugin.json ok:', p.name, p.version);
+          "
+
+      - name: Every skill has SKILL.md with YAML frontmatter
+        run: |
+          for dir in skills/*/; do
+            if [ ! -f "$dir/SKILL.md" ]; then
+              echo "FAIL: $dir missing SKILL.md"; exit 1
+            fi
+            head -1 "$dir/SKILL.md" | grep -q "^---$" || { echo "FAIL: $dir/SKILL.md missing frontmatter"; exit 1; }
+          done
+          echo "all skills ok"
+
+      - name: Every agent .md has YAML frontmatter
+        run: |
+          for f in agents/*.md; do
+            [ -f "$f" ] || continue
+            head -1 "$f" | grep -q "^---$" || { echo "FAIL: $f missing frontmatter"; exit 1; }
+          done
+          echo "all agents ok"
+
+      - name: Every command .md has YAML frontmatter
+        run: |
+          for f in commands/*.md; do
+            [ -f "$f" ] || continue
+            head -1 "$f" | grep -q "^---$" || { echo "FAIL: $f missing frontmatter"; exit 1; }
+          done
+          echo "all commands ok"
+
+      - name: hooks.json is valid JSON (if present)
+        run: |
+          if [ -f hooks/hooks.json ]; then
+            node -e "JSON.parse(require('fs').readFileSync('hooks/hooks.json', 'utf8'))"
+            echo "hooks.json ok"
+          fi
+
+      - name: Hook scripts pass syntax check
+        run: |
+          for f in hooks/*.js; do
+            [ -f "$f" ] || continue
+            node -c "$f" || { echo "FAIL: $f syntax error"; exit 1; }
+          done
+          echo "hook scripts ok"
+
+      - name: No em-dashes in markdown
+        run: |
+          if grep -rP "[\x{2014}\x{2013}]" --include="*.md" . ; then
+            echo "FAIL: em-dash or en-dash found"; exit 1
+          fi
+          echo "no em-dashes"
+
+      - name: Run hook fixture tests (if present)
+        run: |
+          if [ -f tests/run.js ]; then
+            node tests/run.js
+          else
+            echo "no tests/run.js; skipping"
+          fi
